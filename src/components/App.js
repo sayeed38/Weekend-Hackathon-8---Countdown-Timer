@@ -3,7 +3,6 @@ import "../styles/App.css";
 
 const App = () => {
   // write your code here
-  const [input, setInput] = useState("");
   const [timer, setTimer] = useState(0);
 
   useEffect(() => {
@@ -17,17 +16,17 @@ const App = () => {
     return () => clearTimeout(timerId);
   });
 
-  const handleInput = (e) => {
-    e.persist();
-    if (
-      (e.keyCode >= 48 && e.keyCode <= 57) ||
-      (e.keyCode >= 96 && e.keyCode <= 105)
-    ) {
-      setInput(input + e.key);
-    }
-    if (e.keyCode === 13) {
-      setTimer(parseInt(input, 10));
-      setInput("");
+  const handleInput = (event) => {
+    if (event.keyCode === 13) {
+      if (isNaN(event.target.value)) {
+        setTimer(0);
+        return;
+      }
+      setTimer(
+        parseInt(event.target.value, 10) <= 0
+          ? 0
+          : parseInt(event.target.value, 10)
+      );
     }
   };
   return (
@@ -37,7 +36,6 @@ const App = () => {
           Reverse countdown for
           <input
             id="timeCount"
-            value={input}
             onKeyDown={(event) => handleInput(event)}
           />{" "}
           sec.
